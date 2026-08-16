@@ -1,3 +1,4 @@
+import { DataError, NetworkError } from "./lab2ErrorHandling";
 
 export interface Product {
   id: number;
@@ -22,15 +23,18 @@ export interface SalesReport {
 export const fetchProductCatalog = (): Promise<Product[]> => {
   return new Promise((resolve, reject) => {
   setTimeout(() => {
-    if (Math.random() < 0.8) {
+    const roll = Math.random();
+    if (roll < 0.7) {
       const sampleProducts : Product[] = [
         { id: 1, name: "Laptop", price: 1200 },
         { id: 2, name: "Headphones", price: 200 },
         { id: 3, name: "Mouse", price: 50}
       ]
     resolve(sampleProducts);
+    } else if (roll < 0.85) {
+    reject(new NetworkError("Check connection and try again"));
     } else {
-    reject("Failed to fetch product catalog.");
+      reject(new DataError("Failed to fetch Product Catalog"));
     }
   }, 1000);
   });
@@ -39,7 +43,8 @@ export const fetchProductCatalog = (): Promise<Product[]> => {
 export const fetchProductReviews = (productId: number): Promise<Review[]> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (Math.random() < 0.8) {
+      const roll = Math.random();
+      if (roll < 0.7) {
         const sampleReviews : Review[] = [
           { id: 1, productId: 1, rating: 5, comment: `Games like an absolute beast while maintaing daily use functionality.`},
           { id: 2, productId: 1, rating: 2, comment: `Hardware lacks capability for gaming even though it is advertised for gaming`},
@@ -50,8 +55,10 @@ export const fetchProductReviews = (productId: number): Promise<Review[]> => {
         ]
         const productReviews = sampleReviews.filter(data => data.productId === productId);
         resolve(productReviews);
+      } else if (roll < 0.85) {
+        reject(new NetworkError("Check connection and try again"));
       } else {
-        reject(`Failed to fetch reviews for Product ID ${productId}.`);
+        reject(new DataError(`Failed to fetch reviews for Product ID ${productId}.`));
       }
     }, 1500);
   });
@@ -60,13 +67,16 @@ export const fetchProductReviews = (productId: number): Promise<Review[]> => {
 export const fetchSalesReport = (): Promise<SalesReport> => {
   return new Promise ((resolve, reject) => {
     setTimeout (() => {
-      if (Math.random() < 0.8) {
+      const roll = Math.random();
+      if (roll < 0.7) {
         const sampleSalesReport: SalesReport = {
           totalSales: 2000000, unitsSold: 4000, averagePrice: 500 
         }
         resolve(sampleSalesReport);
+      } else if (roll < 0.85) {
+        reject(new NetworkError("Check connection and try again"))
       } else {
-        reject("Failed to fetch sales report.")
+        reject(new DataError("Failed to fetch sales report"));
       }
     }, 1000);
   });
